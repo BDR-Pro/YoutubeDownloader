@@ -1,11 +1,15 @@
 # YoutubeDownloader
 
-
+```
 A simple Django web application to download YouTube videos.
 run it and paste http://127.0.0.1:8000/
 
 https://www.youtube.com/watch?v=your_video_id
+
+
 http://127.0.0.1:8000/watch?v=your_video_id
+
+```
 
 ## Features
 
@@ -23,7 +27,7 @@ http://127.0.0.1:8000/watch?v=your_video_id
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/youtube-downloader.git
+    git clon https://github.com/BDR-Pro/YoutubeDownloader
     ```
 
 2. Install the required Python packages:
@@ -44,7 +48,6 @@ http://127.0.0.1:8000/watch?v=your_video_id
 
 3. Enter a YouTube video URL with the 'v' parameter (e.g., [http://localhost:8000/watch?v=your_video_id](http://localhost:8000/watch?v=your_video_id)).
 
-4. Click the "Download" button to download the video.
 
 ## Configuration
 
