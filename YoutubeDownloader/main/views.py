@@ -34,7 +34,7 @@ def watch(request):
         # Provide the file for download
         with open(f'{name}', 'rb') as video_file:
             response = HttpResponse(video_file.read(), content_type='video/mp4')
-            response['Content-Disposition'] = f'attachment; filename={name}.mp4'
+            response['Content-Disposition'] = f'attachment; filename={video_id}.mp4'
             return response
         
     
