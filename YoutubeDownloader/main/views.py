@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 from pytube import YouTube
 from django.http import HttpResponse
 from django.conf import settings
@@ -30,6 +30,7 @@ def watch(request):
         
     except Exception as e:
         # Download the video
+        print(e)
         name=video_stream.download(output_path=f'downloads\\', filename=f'{video_id}'+'.mp4')
         # Provide the file for download
         with open(f'{name}', 'rb') as video_file:
@@ -37,4 +38,16 @@ def watch(request):
             response['Content-Disposition'] = f'attachment; filename={video_id}.mp4'
             return response
         
-    
+import os
+import shutil
+from django.http import JsonResponse
+
+def delete(request):
+    try:
+        shutil.rmtree('downloads')
+        os.mkdir('downloads')
+        message = 'Deleted contents of "downloads" directory. We will never save history of your downloads.'
+    except Exception as e:
+        message = f'Error: {str(e)}'
+
+    return JsonResponse({'message': message})
