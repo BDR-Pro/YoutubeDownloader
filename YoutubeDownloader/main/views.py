@@ -1,10 +1,14 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from pytube import YouTube
 from django.http import HttpResponse
 from django.conf import settings
 import os
 
-def watch(request):
+def main(request):
+    video_id = request.GET.get('v', None)
+    return render(request,'main.html',{'video_id':video_id})
+
+def download(request):
     try:
         # Get the video ID from the 'v' query parameter
         video_id = request.GET.get('v', None)
@@ -48,6 +52,26 @@ def delete(request):
         os.mkdir('downloads')
         message = 'Deleted contents of "downloads" directory. We will never save history of your downloads.'
     except Exception as e:
-        message = f'Error: {str(e)}'
+        print(e)
+        message = ':)'
 
     return JsonResponse({'message': message})
+
+
+from django.http import JsonResponse
+
+def video_details(request):
+    try:
+        video_id = request.GET.get('v', None)
+        if not video_id:
+            return JsonResponse({'error': 'Video ID not provided.'}, status=400)
+
+        youtube = YouTube(f'https://www.youtube.com/watch?v={video_id}')
+        title = youtube.title
+        thumbnail_url = youtube.thumbnail_url
+
+        return JsonResponse({'title': title, 'thumbnail': thumbnail_url})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+

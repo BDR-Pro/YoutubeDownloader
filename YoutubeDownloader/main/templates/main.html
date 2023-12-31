@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Downloader</title>
+    <!-- Add the Bootstrap CSS link and Google Material Icons -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 80%; /* Adjust the width as needed */
+        }
+
+        .card {
+            width: 80%; /* Minimize the card by 20% */
+            margin: auto; /* Center the card horizontally */
+            margin-top: 20px; /* Add margin at the top */
+        }
+
+        #loading-screen,
+        #video-details {
+            text-align: center; /* Center text within these elements */
+        }
+
+        #download-link,
+        #delete-link {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="card" id="loading-screen" style="display:none;">
+            <div class="card-body">
+                <p class="card-text">Loading...</p>
+            </div>
+        </div>
+
+        <div class="card" id="video-details" style="display:none;">
+            <img class="card-img-top" id="video-thumbnail" alt="Thumbnail">
+            <div class="card-body">
+                <h2 class="card-title" id="video-title"></h2>
+                <a id="download-link" class="btn btn-primary" href="#" download>
+                    <i class="material-icons">cloud_download</i>
+                </a>
+                <a id="delete-link" class="btn btn-danger" href="/delete">
+                    <i class="material-icons">delete</i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add the Bootstrap JS and Popper.js scripts at the end of the body -->
+    <!-- Full version of jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+        jQuery(document).ready(function () {
+            // Get video_id from the template
+            var video_id = "{{ video_id }}";
+
+            // Function to toggle loading screen
+            function toggleLoadingScreen(show) {
+                if (show) {
+                    $("#loading-screen").show();
+                    $("#video-details").hide();
+                } else {
+                    $("#loading-screen").hide();
+                    $("#video-details").show();
+                }
+            }
+
+            // Display loading screen initially
+            toggleLoadingScreen(true);
+
+            // Fetch video details using AJAX
+            jQuery.ajax({
+                url: '/video_details/?v=' + video_id,
+                type: 'GET',
+                success: function (data) {
+                    // Display video details
+                    toggleLoadingScreen(false);
+
+                    // Set video title
+                    jQuery("#video-title").text(data.title);
+
+                    // Set video thumbnail
+                    jQuery("#video-thumbnail").attr("src", data.thumbnail);
+
+                    // Set download link
+                    jQuery("#download-link").attr("href", '/download?v=' + video_id);
+                },
+                error: function () {
+                    // Handle error
+                    toggleLoadingScreen(false);
+                    alert('Error fetching video details.');
+                }
+            });
+
+            // Click event for the download button
+            $("#download-link").on("click", function () {
+                // Show loading screen during download
+                toggleLoadingScreen(true);
+
+                // Simulate a download delay (replace with actual download logic)
+                setTimeout(function () {
+                    // Hide loading screen after download
+                    toggleLoadingScreen(false);
+                }, 3000); // Adjust the delay time as needed
+            });
+        });
+    </script>
+
+</body>
+
+</html>
